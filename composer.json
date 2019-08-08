@@ -1,0 +1,28 @@
+{
+    "name": "idawnlgiht/avatar-cache",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Core\\": "core/",
+            "Service\\": "service/"
+        }
+    },
+    "require": {
+        "php": ">=7.3",
+        "nikic/fast-route": "^1.3",
+        "guzzlehttp/guzzle": "^6.3",
+        "psr/log": "^1.1",
+        "filp/whoops": "^2.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "idawnlight",
+            "email": "idawn@live.com"
+        }
+    ],
+    "require-dev": {
+        "eaglewu/swoole-ide-helper": "dev-master",
+        "roave/security-advisories": "dev-master"
+    }
+}
