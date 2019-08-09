@@ -9,10 +9,7 @@ $config = [
                 'listen' => '0.0.0.0',
                 'port' => 9501,
                 'config' => [ // Refer to https://wiki.swoole.com/wiki/page/274.html
-                    'worker_num'       => 8,
-                    'max_request'      => 5000,
-                    'task_worker_num'  => 8,
-                    'task_max_request' => 1000
+
                 ]
             ]
         ],

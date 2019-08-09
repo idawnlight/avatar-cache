@@ -22,7 +22,7 @@
         }
     ],
     "require-dev": {
-        "eaglewu/swoole-ide-helper": "dev-master",
-        "roave/security-advisories": "dev-master"
+        "roave/security-advisories": "dev-master",
+        "eaglewu/swoole-ide-helper": "dev-master"
     }
 }

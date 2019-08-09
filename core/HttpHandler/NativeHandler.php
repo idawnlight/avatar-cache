@@ -18,7 +18,6 @@ class NativeHandler implements HandlerInterface
     }
 
     public function response(ResponseInterface $response, $fd = null) {
-        // TODO: Implement response() method.
         $this->send($response);
         flush();
         while (ob_get_level() > 0) {
