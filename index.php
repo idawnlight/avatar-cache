@@ -8,6 +8,6 @@ const DEBUG_MODE = true;
 
 require_once ROOT_DIR . 'vendor/autoload.php';
 
-$config = include ROOT_DIR . 'config.php';
+\Core\Components\Config::setConfig(include ROOT_DIR . 'config.php');
 
-(new \Core\Bootstrap($config))->boot();
+(new \Core\Bootstrap())->boot();

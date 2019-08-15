@@ -3,25 +3,28 @@
 
 namespace Core\HttpHandler;
 
-use GuzzleHttp\Psr7\Request;
-use Swoole;
 use Core\Bootstrap;
+use Core\Components\Config;
+use GuzzleHttp\Psr7\Request;
 use Core\Contracts\HandlerInterface;
 use Psr\Http\Message\ResponseInterface;
+use Swoole\Http\Server as swooleServer;
+use Swoole\Http\Request as swooleRequest;
+use Swoole\Http\Response as swooleResponse;
 
-class SwooleHandler implements HandlerInterface
+class Swoole implements HandlerInterface
 {
     protected $bootstrap;
     protected $config;
     protected $server;
 
-    public function __construct(Bootstrap $bootstrap, array $config = []) {
+    public function __construct(Bootstrap $bootstrap) {
         $this->bootstrap = $bootstrap;
-        $this->config = $config;
+        $this->config = Config::handlerOptions();
     }
 
     public function response(ResponseInterface $response, $fd = null) {
-        $resp = Swoole\Http\Response::create($fd);
+        $resp = swooleResponse::create($fd);
         $resp->status($response->getStatusCode());
         foreach ($response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
@@ -39,10 +42,10 @@ class SwooleHandler implements HandlerInterface
     }
 
     public function run(): void {
-        $this->server = new Swoole\Http\Server($this->config['listen'], $this->config['port']);
+        $this->server = new swooleServer($this->config['listen'], $this->config['port']);
         $this->server->set($this->config['config']);
 
-        $this->server->on('request', function (Swoole\Http\Request $request, Swoole\Http\Response $response) use (&$fd) {
+        $this->server->on('request', function (swooleRequest $request, swooleResponse $response) {
             $response->detach();
             $method = $request->server['request_method'] ?? '';
             $uri = $request->server['request_uri'] ?? $request->server['path_info'] ?? '/';

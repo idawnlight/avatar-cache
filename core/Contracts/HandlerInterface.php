@@ -13,7 +13,7 @@ use Psr\Http\Message\ResponseInterface;
  */
 interface HandlerInterface
 {
-    public function __construct(Bootstrap $callback, array $config = []);
+    public function __construct(Bootstrap $callback);
 
     public function response(ResponseInterface $response, $fd = null);
 

@@ -3,19 +3,18 @@
 
 namespace Core;
 
-use Core\Exceptions\HttpHandlerException;
 use FastRoute\Dispatcher;
+use Core\Components\Config;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
+use Core\Exceptions\HttpHandlerException;
 
 class Bootstrap
 {
-    protected $config;
     protected $handler;
     protected $router;
 
-    public function __construct($config) {
-        $this->config = $config;
+    public function __construct() {
         $this->router = new Router();
     }
 
@@ -54,9 +53,8 @@ class Bootstrap
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
                 [$name, $action] = explode('.', $handler);
-                $config = $this->config['service'][$name] ?? [];
                 $class = 'Service\\' . $name . '\Action';
-                $service = new $class($this->handler, array_merge($vars, $parameter), $config, $fd);
+                $service = new $class($this->handler, array_merge($vars, $parameter), $fd);
                 call_user_func([$service, $action]);
                 // ... call $handler with $vars
                 break;
@@ -64,9 +62,8 @@ class Bootstrap
     }
 
     private function _initHttpHandler() :void {
-        $handler = 'Core\HttpHandler\\' . ucfirst($this->config['core']['handler']['type'] . 'Handler');
-        if (!class_exists($handler)) throw new HttpHandlerException('Target HttpHandler ' . $this->config['core']['handler']['type'] . ' not found');
-        $config = $this->config['core']['handler']['config'] ?? [];
-        $this->handler = new $handler($this, $config);
+        $handler = Config::handlerType();
+        if (!class_exists($handler)) throw new HttpHandlerException('Target HttpHandler ' . $handler . ' not found');
+        $this->handler = new $handler($this);
     }
 }

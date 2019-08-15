@@ -7,14 +7,12 @@ use Core\Contracts\HandlerInterface;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 
-class NativeHandler implements HandlerInterface
+class Native implements HandlerInterface
 {
     protected $bootstrap;
-    protected $config;
 
-    public function __construct(Bootstrap $bootstrap, array $config = []) {
+    public function __construct(Bootstrap $bootstrap) {
         $this->bootstrap = $bootstrap;
-        $this->config = $config;
     }
 
     public function response(ResponseInterface $response, $fd = null) {
