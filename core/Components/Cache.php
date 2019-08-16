@@ -20,10 +20,12 @@ class Cache
     public function getCache($identifier, $type = self::TYPE_ANY): CacheAbstract {
         if ($type === self::TYPE_DATA) {
             $item = self::getPool($type)->getItem($identifier);
-            $cache = $item->get()->renew(Config::dataExpire());
-            $item->set($cache);
-            self::getPool($type)->save($item);
-            return $cache;
+            if ($item->get() instanceof DataItem) {
+                $cache = $item->get()->renew(Config::dataExpire());
+                $item->set($cache);
+                self::getPool($type)->save($item);
+            }
+            return $item->get();
         } else {
             return self::getPool($type)->getItem($identifier)->get();
         }
@@ -41,7 +43,7 @@ class Cache
         if (is_string($identifier)) {
             return md5(trim($identifier) . $salt);
         } else {
-            return md5(\GuzzleHttp\json_encode($identifier) . $salt);
+            return md5(serialize($identifier) . $salt);
         }
     }
 

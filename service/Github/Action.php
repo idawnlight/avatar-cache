@@ -1,9 +1,10 @@
 <?php
 
-namespace Service\Tencent;
+namespace Service\Github;
 
 use Core\Components\Cache;
 use Core\Components\Config;
+use Core\Contracts\HandlerInterface;
 use Core\Contracts\Service\ActionAbstract;
 use Core\Items\DataItem;
 use Core\Items\MetaItem;
@@ -11,9 +12,12 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class Action extends ActionAbstract
 {
-    public function index() {
+    private $__type;
+
+    public function username() {
+        $this->__type = Lib::TYPE_USERNAME;
         $this->para = Lib::parseData($this->para);
-        $key = $this->cache->generateKey($this->para, 'qq');
+        $key = $this->cache->generateKey($this->para, 'github_username');
         if ($this->cache->isCached($key, Cache::TYPE_META)) {
             $cache = $this->cache->getCache($key, Cache::TYPE_META);
             $dataKey = $cache->getDataKey();
@@ -29,8 +33,27 @@ class Action extends ActionAbstract
         }
     }
 
+    public function id() {
+        $this->__type = Lib::TYPE_ID;
+        $this->para = Lib::parseData($this->para);
+        $key = $this->cache->generateKey($this->para, 'github_id');
+        if ($this->cache->isCached($key, Cache::TYPE_META)) {
+            $cache = $this->cache->getCache($key, Cache::TYPE_META);
+            $dataKey = $cache->getDataKey();
+            $data = $this->cache->getCache($dataKey, Cache::TYPE_DATA);
+            $this->handler->response($data->createResponse(), $this->responseId);
+            if ($cache->hasExpired()) {
+                $this->refreshCache($key);
+            }
+        } else {
+            $url = Lib::buildUrl($this->para, Lib::TYPE_ID);
+            $this->handler->response($this->helper->createRedirectResponse($url), $this->responseId);
+            $this->refreshCache($key);
+        }
+    }
+
     public function refreshCache($key) {
-        $url = Lib::buildUrl($this->para);
+        $url = Lib::buildUrl($this->para, $this->__type);
         try {
             $result = $this->helper->request($url);
             $body = $result->getBody()->__toString();

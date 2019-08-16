@@ -43,9 +43,10 @@ $config = [
                 'data' => 2592000
             ]
         ],
-        'gravatar' => [
+        'github' => [
             // Custom config for every single service
-            // seem to be useless :(
+            // In fact we don't need it
+            'access_token' => ''
         ]
     ]
 ];
