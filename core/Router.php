@@ -3,6 +3,7 @@
 
 namespace Core;
 
+use Core\Components\Config;
 use function FastRoute\cachedDispatcher;
 use FastRoute\RouteCollector;
 
@@ -17,8 +18,8 @@ class Router
             $this->__routeCollector = $r;
             $this->loadService();
         }, [
-            'cacheFile' => CACHE_DIR . 'route.cache',
-            'cacheDisabled' => DEBUG_MODE
+            'cacheFile' => CACHE_DIR . 'route.cache.php',
+            'cacheDisabled' => Config::debug()
         ]);
     }
 

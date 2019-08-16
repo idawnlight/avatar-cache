@@ -10,16 +10,16 @@ use Core\Contracts\HandlerInterface;
 abstract class ActionAbstract
 {
     protected $handler;
-    protected $data;
+    protected $para;
     protected $responseId;
-    protected $cacheHelper;
+    protected $cache;
     protected $helper;
 
-    public function __construct(HandlerInterface $handler, array $data, $fd = null) {
+    public function __construct(HandlerInterface $handler, array $para, $fd = null) {
         $this->handler = $handler;
-        $this->data = $data;
+        $this->para = $para;
         $this->responseId = $fd;
-        $this->cacheHelper = new Cache();
+        $this->cache = new Cache();
         $this->helper = new Helper();
     }
 }

@@ -1,13 +1,11 @@
 <?php
 
-namespace Core\Items;
+namespace Core\Contracts;
 
-class CacheItem
+abstract class CacheAbstract
 {
     protected $type = '';
-    protected $rawContent;
     protected $expireAt;
-    protected $size;
 
     public function getType() {
         return $this->type;
@@ -20,11 +18,6 @@ class CacheItem
 
     public function renew($time) {
         $this->expireAt = time() + $time;
-    }
-
-    public function __construct($rawContent = '', $expireAt = -1) {
-        $this->rawContent = $rawContent;
-        $this->expireAt = $expireAt;
-        $this->size = strlen($rawContent);
+        return $this;
     }
 }

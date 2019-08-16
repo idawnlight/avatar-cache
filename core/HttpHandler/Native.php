@@ -58,19 +58,13 @@ class Native implements HandlerInterface
             }
         }
         $stream = $response->getBody();
-        if ($stream->isSeekable()) {
-            $stream->rewind();
+        if (strlen($stream) !== 0) {
+            if ($stream->isSeekable()) {
+                $stream->rewind();
+            }
+            while (!$stream->eof()) {
+                echo $stream->read(1024 * 8);
+            }
         }
-        while (!$stream->eof()) {
-            echo $stream->read(1024 * 8);
-        }
-    }
-
-
-    /**
-     * @param Bootstrap $bootstrap
-     */
-    public function setBootstrap(Bootstrap $bootstrap): void {
-        $this->bootstrap = $bootstrap;
     }
 }

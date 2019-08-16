@@ -28,15 +28,17 @@ class Swoole implements HandlerInterface
         $resp->status($response->getStatusCode());
         foreach ($response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
-                $resp->header("$name: $value", true);
+                $resp->header($name, $value);
             }
         }
         $stream = $response->getBody();
-        if ($stream->isSeekable()) {
-            $stream->rewind();
-        }
-        while (!$stream->eof()) {
-            $resp->write($stream->read(1024 * 8));
+        if (strlen($stream) !== 0) {
+            if ($stream->isSeekable()) {
+                $stream->rewind();
+            }
+            while (!$stream->eof()) {
+                $resp->write($stream->read(1024 * 8));
+            }
         }
         $resp->end();
     }
