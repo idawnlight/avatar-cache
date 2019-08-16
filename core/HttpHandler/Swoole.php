@@ -41,7 +41,7 @@ class Swoole implements HandlerInterface
         $resp->end();
     }
 
-    public function run(): void {
+    public function run() {
         $this->server = new swooleServer($this->config['listen'], $this->config['port']);
         $this->server->set($this->config['config']);
 

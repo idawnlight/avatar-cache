@@ -45,7 +45,4 @@ $config = [
 // Register Error Handler
 (new \Whoops\Run)->prependHandler(new \Whoops\Handler\PrettyPageHandler)->register();
 
-// Prepare Stash Pool
-
-
 return $config;

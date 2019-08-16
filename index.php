@@ -8,6 +8,7 @@ const DEBUG_MODE = true;
 
 require_once ROOT_DIR . 'vendor/autoload.php';
 
-\Core\Components\Config::setConfig(include ROOT_DIR . 'config.php');
+\Core\Components\Config::setConfig(require ROOT_DIR . 'config.php');
 
-(new \Core\Bootstrap())->boot();
+// Magic!
+new \Core\Bootstrap;

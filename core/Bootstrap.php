@@ -3,6 +3,7 @@
 
 namespace Core;
 
+use Core\Contracts\HandlerInterface;
 use FastRoute\Dispatcher;
 use Core\Components\Config;
 use GuzzleHttp\Psr7\Response;
@@ -16,27 +17,20 @@ class Bootstrap
 
     public function __construct() {
         $this->router = new Router();
-    }
-
-    public function boot(): void {
-        $this->_initHttpHandler();
+        if (PHP_SAPI != 'cli') {
+            $handler = \Core\HttpHandler\Native::class;
+        } else {
+            $handler = Config::handlerType();
+        }
+        if (! class_exists($handler)) throw new HttpHandlerException('Target HttpHandler ' . $handler . ' not found');
+        $this->handler = new $handler($this);
+        if (! $this->handler instanceof HandlerInterface) throw new HttpHandlerException('Target HttpHandler ' . $handler . ' invalid');
         $this->handler->run();
     }
 
-    public function handle(RequestInterface $request, $fd = null): void {
-        //var_dump(file_get_contents('php://input'));
-        //var_dump(explode('HTTP/', $_SERVER['SERVER_PROTOCOL']));
-        //var_dump($request->getUri()->getPath());
-        //var_dump(urldecode($request->getUri()->getQuery()));
+    public function handle(RequestInterface $request, $fd = null) {
         parse_str($request->getUri()->getQuery(), $parameter);
-        //var_dump($request->getHeaders());
-        //var_dump($request->getMethod());
-        //var_dump($request->getHeaders());
-        //var_dump($request->getHeader('caChe-conTrol'));
-
-        //var_dump($this->_router->getDispatcher());
         $routeInfo = $this->router->dispatch($request->getMethod(), $request->getUri()->getPath());
-        //var_dump($routeInfo);
         switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
                 // ... 404 Not Found
@@ -59,11 +53,5 @@ class Bootstrap
                 // ... call $handler with $vars
                 break;
         }
-    }
-
-    private function _initHttpHandler() :void {
-        $handler = Config::handlerType();
-        if (!class_exists($handler)) throw new HttpHandlerException('Target HttpHandler ' . $handler . ' not found');
-        $this->handler = new $handler($this);
     }
 }

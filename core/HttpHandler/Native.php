@@ -16,6 +16,7 @@ class Native implements HandlerInterface
     }
 
     public function response(ResponseInterface $response, $fd = null) {
+        ignore_user_abort(true);
         $this->send($response);
         flush();
         while (ob_get_level() > 0) {
@@ -24,7 +25,6 @@ class Native implements HandlerInterface
         if (function_exists('fastcgi_finish_request')) {
             fastcgi_finish_request();
         }
-
     }
 
     public function run(): void {
