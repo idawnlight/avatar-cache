@@ -18,6 +18,7 @@ class Cache
     }
 
     public function getCache($identifier, $type = self::TYPE_ANY): CacheAbstract {
+        return self::getPool($type)->getItem($identifier)->get();
         if ($type === self::TYPE_DATA) {
             $item = self::getPool($type)->getItem($identifier);
             if ($item->get() instanceof DataItem) {
@@ -35,8 +36,14 @@ class Cache
         return self::getPool($type)->hasItem($identifier);
     }
 
-    public function renewExpire($identifier) {
-
+    public function renewExpire($identifier, $type = self::TYPE_ANY) {
+        $item = self::getPool($type)->getItem($identifier);
+        if ($item->get() instanceof CacheAbstract) {
+            $cache = $item->get()->renew(Config::expire($type));
+            $item->set($cache);
+            self::getPool($type)->save($item);
+        }
+        return $item->get();
     }
 
     public function generateKey($identifier, $salt = null): string {

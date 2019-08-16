@@ -48,6 +48,17 @@ class Config
         return self::$config['service']['general']['expire']['data'];
     }
 
+    public static function expire($type) {
+        switch ($type) {
+            case Cache::TYPE_META:
+                return self::metaExpire();
+            case Cache::TYPE_DATA:
+                return self::dataExpire();
+            default:
+                return Config::metaExpire();
+        }
+    }
+
     public static function anyPool() :PoolInterface {
         return self::$config['core']['cache']['any'];
     }
