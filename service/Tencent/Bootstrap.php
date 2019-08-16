@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Service\Gravatar;
+namespace Service\Tencent;
 
 use Core\Contracts\Service\BootstrapInterface;
 use Core\Router;
@@ -9,6 +9,6 @@ use Core\Router;
 class Bootstrap implements BootstrapInterface
 {
     public static function route(Router $router) {
-        $router->addRoute('GET', '/gravatar/{identifier:[a-f0-9]{32}}', 'index');
+        $router->addRoute('GET', '/qq/{identifier:[1-9][0-9]{4,10}}', 'index');
     }
 }

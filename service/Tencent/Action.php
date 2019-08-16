@@ -1,6 +1,6 @@
 <?php
 
-namespace Service\Gravatar;
+namespace Service\Tencent;
 
 use Core\Components\Cache;
 use Core\Components\Config;

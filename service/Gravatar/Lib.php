@@ -17,12 +17,13 @@ class Lib
     }
 
     public static function buildQuery(array $data): string {
-        $para = [];
+        $para = [
+            's' => $data['size'],
+            'r' => $data['rating']
+        ];
 
-        $para['s'] = $data['size'];
         ($data['default'] !== null) ? $para['d'] = $data['default'] : null;
         ($data['force_default'] !== null) ? $para['f'] = $data['force_default'] : null;
-        $para['r'] = $data['rating'];
 
         return http_build_query($para);
     }
