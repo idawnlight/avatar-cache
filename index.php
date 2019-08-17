@@ -4,7 +4,8 @@ const ROOT_DIR = __DIR__ . '/';
 const CORE_DIR = ROOT_DIR  . 'core/';
 const SERVICE_DIR = ROOT_DIR  . 'service/';
 const CACHE_DIR = ROOT_DIR . 'cache/';
-const VERSION = '0.0.1';
+const GIT_DIR = ROOT_DIR . '.git/';
+const VERSION = '0.1.0';
 
 require_once ROOT_DIR . 'vendor/autoload.php';
 
