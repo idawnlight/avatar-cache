@@ -4,8 +4,8 @@ namespace Core\Contracts;
 
 abstract class CacheAbstract
 {
-    protected $type = '';
-    protected $expireAt;
+    public $type = '';
+    public $expireAt;
 
     public function getType() {
         return $this->type;

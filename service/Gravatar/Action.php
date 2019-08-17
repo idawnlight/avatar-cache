@@ -9,7 +9,7 @@ class Action extends ActionAbstract
 {
     public function index() {
         $this->para = Lib::parseData($this->para);
-        $key = $this->cache->generateKey($this->para, 'gravatar');
+        $key = Cache::generateKey($this->para, 'gravatar');
         $url = Lib::buildUrl($this->para);
         $this->handle($key, $url);
     }

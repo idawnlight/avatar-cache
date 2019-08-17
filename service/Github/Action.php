@@ -12,7 +12,7 @@ class Action extends ActionAbstract
     public function username() {
         $this->__type = Lib::TYPE_USERNAME;
         $this->para = Lib::parseData($this->para);
-        $key = $this->cache->generateKey($this->para, 'github_username');
+        $key = Cache::generateKey($this->para, 'github_username');
         $url = Lib::buildUrl($this->para);
         $this->handle($key, $url);
     }
@@ -20,7 +20,7 @@ class Action extends ActionAbstract
     public function id() {
         $this->__type = Lib::TYPE_ID;
         $this->para = Lib::parseData($this->para);
-        $key = $this->cache->generateKey($this->para, 'github_id');
+        $key = Cache::generateKey($this->para, 'github_id');
         $url = Lib::buildUrl($this->para, Lib::TYPE_ID);
         $this->handle($key, $url);
     }

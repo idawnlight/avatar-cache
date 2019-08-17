@@ -48,7 +48,7 @@ class Bootstrap
                 $vars = $routeInfo[2];
                 [$name, $action] = explode('.', $handler);
                 $class = 'Service\\' . $name . '\Action';
-                $service = new $class($this->handler, array_merge($vars, $parameter), $fd);
+                $service = new $class($this->handler, array_merge($vars, $parameter, ['request' => $request->getHeaders()]), $fd);
                 call_user_func([$service, $action]);
                 // ... call $handler with $vars
                 break;

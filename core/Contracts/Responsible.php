@@ -7,5 +7,5 @@ use GuzzleHttp\Psr7\Response;
 
 interface Responsible
 {
-    public function createResponse() :Response;
+
 }

@@ -6,10 +6,10 @@ use Core\Contracts\CacheAbstract;
 
 class MetaItem extends CacheAbstract
 {
-    protected $type = 'meta';
-    protected $rawUrl = '';
-    protected $para = [];
-    protected $dataKey;
+    public $type = 'meta';
+    public $rawUrl = '';
+    public $para = [];
+    public $dataKey;
 
     public function __construct($dataKey, $rawUrl = '', $para = [], $expireAt = -1) {
         $this->rawUrl = $rawUrl;
