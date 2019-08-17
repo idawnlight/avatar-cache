@@ -30,7 +30,8 @@ class DataItem extends CacheAbstract implements Responsible
             'Date' => gmdate('D, d M Y H:i:s T', time()),
             'Last-Modified' => gmdate('D, d M Y H:i:s T', $this->last_modify),
             'Expire' => gmdate('D, d M Y H:i:s T', time() + Config::metaExpire()),
-            'Cache-Control' => 'max-age=' . Config::metaExpire()
+            'Cache-Control' => 'max-age=' . Config::metaExpire(),
+            'X-Cache-Status' => 'HIT; ' . $this->expireAt . '; ' . (($this->hasExpired()) ? 'Expired; Refresh' : 'Live')
         ], $this->content);
     }
 }

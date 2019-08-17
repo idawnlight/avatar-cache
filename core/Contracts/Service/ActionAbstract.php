@@ -27,6 +27,21 @@ abstract class ActionAbstract
         $this->helper = new Helper();
     }
 
+    public function handle($key, $url) {
+        if ($this->cache->isCached($key, Cache::TYPE_META)) {
+            $cache = $this->cache->getCache($key, Cache::TYPE_META);
+            $dataKey = $cache->getDataKey();
+            $data = $this->cache->getCache($dataKey, Cache::TYPE_DATA);
+            $this->handler->response($data->createResponse(), $this->responseId);
+            if ($cache->hasExpired()) {
+                $this->refreshCache($key, $url, true);
+            }
+        } else {
+            $this->handler->response($this->helper->createRedirectResponse($url), $this->responseId);
+            $this->refreshCache($key, $url);
+        }
+    }
+
     public function refreshCache($key, $url, $isCached = false) {
         try {
             $result = $this->helper->request($url);

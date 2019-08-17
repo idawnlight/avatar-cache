@@ -34,7 +34,8 @@ class Helper
         return new Response(302, [
             'Cache-Control' => 'no-cache',
             'Pragma' => 'no-cache',
-            'Location' => $url
+            'Location' => $url,
+            'X-Cache-Status: MISS; Redirected'
         ]);
     }
 }
