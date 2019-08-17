@@ -12,7 +12,14 @@ use Core\Exceptions\HttpHandlerException;
 
 class Bootstrap
 {
+    /**
+     * @var HandlerInterface
+     */
     protected $handler;
+
+    /**
+     * @var Router
+     */
     protected $router;
 
     public function __construct() {

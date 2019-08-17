@@ -13,6 +13,11 @@ use Psr\Http\Message\ResponseInterface;
 
 class Helper
 {
+    /**
+     * @param string $url
+     * @return ResponseInterface
+     * @throws GuzzleException
+     */
     public static function request(string $url) {
         $client = new Client();
         try {
@@ -28,7 +33,13 @@ class Helper
         }
     }
 
-    public static function createResponseFromCache(CacheAbstract $cache, $dataKey, $gzip): ResponseInterface {
+    /**
+     * @param CacheAbstract $cache
+     * @param string $dataKey
+     * @param bool $gzip
+     * @return ResponseInterface
+     */
+    public static function createResponseFromCache(CacheAbstract $cache, string $dataKey, bool $gzip = false): ResponseInterface {
         if (! $cache instanceof DataItem) {
             return new Response(500, [],'internal cache error');
         }
@@ -53,12 +64,21 @@ class Helper
         ], $header), $content);
     }
 
+    /**
+     * Create a 304 response
+     * @return ResponseInterface
+     */
     public static function createCachedResponse(): ResponseInterface {
         return new Response(304, [
             'X-Cache-Status' => 'HIT; Browser Cache'
         ]);
     }
 
+    /**
+     * Create a 302 redirect response
+     * @param string $url
+     * @return ResponseInterface
+     */
     public static function createRedirectResponse(string $url): ResponseInterface {
         return new Response(302, [
             'Cache-Control' => 'no-cache',
@@ -68,7 +88,11 @@ class Helper
         ]);
     }
 
-    public static function gzencode($str) {
+    /**
+     * @param string $str
+     * @return string
+     */
+    public static function gzencode(string $str): string {
         if (Config::enableGzip() && function_exists("gzencode")) {
             return gzencode($str, Config::gzipLevel());
         } else {

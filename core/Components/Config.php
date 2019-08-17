@@ -8,15 +8,24 @@ class Config
 {
     protected static $config = [];
 
+    /**
+     * @return array
+     */
     public static function getConfig() :array {
         return self::$config;
     }
 
+    /**
+     * @param $config
+     */
     public static function setConfig($config) :void {
         self::$config = $config;
     }
 
-    public static function cpuNum() {
+    /**
+     * @return int
+     */
+    public static function cpuNum(): int {
         if (!function_exists("swoole_cpu_num")) {
             return 1;
         } else {
@@ -24,47 +33,82 @@ class Config
         }
     }
 
-    public static function debug() {
+    /**
+     * @return bool
+     */
+    public static function debug(): bool {
         return self::$config['core']['debug'];
     }
 
-    public static function version() {
+    /**
+     * @return string
+     */
+    public static function version(): string {
         return self::$config['core']['version'] ?? 'unknown';
     }
 
-    public static function node() {
+    /**
+     * @return string
+     */
+    public static function node(): string {
         return self::$config['core']['node'] ?? 'node';
     }
 
-    public static function enableGzip() {
+    /**
+     * @return bool
+     */
+    public static function enableGzip(): bool {
         return self::$config['core']['cache']['gzip']['enabled'] ?? false;
     }
 
-    public static function gzipLevel() {
+    /**
+     * @return int
+     */
+    public static function gzipLevel(): int {
         return self::$config['core']['cache']['gzip']['level'] ?? 1;
     }
 
-    public static function service($service) :array {
+    /**
+     * @param string $service
+     * @return array
+     */
+    public static function service(string $service) :array {
         return self::$config['service'][$service] ?? [];
     }
 
+    /**
+     * @return string
+     */
     public static function handlerType() :string {
         return self::$config['core']['handler']['type'];
     }
 
+    /**
+     * @return array
+     */
     public static function handlerOptions() :array {
         return self::$config['core']['handler']['options'] ?? [];
     }
 
-    public static function metaExpire() {
+    /**
+     * @return int
+     */
+    public static function metaExpire(): int {
         return self::$config['service']['general']['expire']['meta'];
     }
 
-    public static function dataExpire() {
+    /**
+     * @return int
+     */
+    public static function dataExpire(): int {
         return self::$config['service']['general']['expire']['data'];
     }
 
-    public static function expire($type) {
+    /**
+     * @param $type
+     * @return int
+     */
+    public static function expire($type): int {
         switch ($type) {
             case Cache::TYPE_META:
                 return self::metaExpire();
@@ -75,14 +119,23 @@ class Config
         }
     }
 
+    /**
+     * @return PoolInterface
+     */
     public static function anyPool() :PoolInterface {
         return self::$config['core']['cache']['any'];
     }
 
+    /**
+     * @return PoolInterface
+     */
     public static function metaPool() :PoolInterface {
         return self::$config['core']['cache']['meta'];
     }
 
+    /**
+     * @return PoolInterface
+     */
     public static function dataPool() :PoolInterface {
         return self::$config['core']['cache']['data'];
     }

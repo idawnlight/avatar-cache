@@ -13,28 +13,53 @@ class Cache
     const TYPE_DATA = 0001;
     const TYPE_META = 0002;
 
-    public static function setCache($identifier, $type = self::TYPE_ANY, $content = '') {
+    /**
+     * @param string $identifier
+     * @param int $type
+     * @param \Serializable | string $content
+     * @return bool
+     */
+    public static function setCache($identifier, $type, $content) {
         return self::getPool($type)->save(self::getPool($type)->getItem($identifier)->set($content));
     }
 
-    public static function getCache($identifier, $type = self::TYPE_ANY): CacheAbstract {
+    /**
+     * @param string $identifier
+     * @param int $type
+     * @return CacheAbstract | MetaItem | DataItem
+     */
+    public static function getCache(string $identifier, $type = self::TYPE_ANY): CacheAbstract {
         return self::getPool($type)->getItem($identifier)->get();
     }
 
-    public static function isCached($identifier, $type = self::TYPE_ANY): bool {
+    /**
+     * @param string $identifier
+     * @param int $type
+     * @return bool
+     */
+    public static function isCached(string $identifier, $type = self::TYPE_ANY): bool {
         return self::getPool($type)->hasItem($identifier);
     }
 
-    public static function renewExpire($identifier, $type = self::TYPE_ANY) {
+    /**
+     * @param string $identifier
+     * @param int $type
+     * @return void
+     */
+    public static function renewExpire(string $identifier, $type = self::TYPE_ANY): void {
         $item = self::getPool($type)->getItem($identifier);
         if ($item->get() instanceof CacheAbstract) {
             $cache = $item->get()->renew(Config::expire($type));
             $item->set($cache);
             self::getPool($type)->save($item);
         }
-        return $item->get();
     }
 
+    /**
+     * @param \Serializable | string $identifier
+     * @param string $salt
+     * @return string
+     */
     public static function generateKey($identifier, $salt = null): string {
         if (is_string($identifier)) {
             return md5(trim($identifier) . $salt);
@@ -43,6 +68,10 @@ class Cache
         }
     }
 
+    /**
+     * @param int $type
+     * @return PoolInterface
+     */
     public static function getPool($type = self::TYPE_ANY): PoolInterface {
         switch ($type) {
             case self::TYPE_META:

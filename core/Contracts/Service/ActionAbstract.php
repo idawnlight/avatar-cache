@@ -26,7 +26,12 @@ abstract class ActionAbstract
         $this->responseId = $fd;
     }
 
-    public function handle($key, $url) {
+    /**
+     * @param string $key
+     * @param string $url
+     * @return void
+     */
+    public function handle(string $key, string $url): void {
         $user['modified_since'] = strtotime($this->request->getHeaderLine('If-Modified-Since'));
         $user['etag'] = $this->request->getHeaderLine('If-None-Match');
         $user['gzip'] = strpos(' ' . $this->request->getHeaderLine('Accept-Encoding'), 'gzip') && Config::enableGzip() && function_exists("gzencode");
@@ -48,7 +53,13 @@ abstract class ActionAbstract
         }
     }
 
-    public function refreshCache($key, $url, $isCached = false) {
+    /**
+     * @param string $key
+     * @param string $url
+     * @param bool $isCached
+     * @return void
+     */
+    public function refreshCache(string $key, string $url, bool $isCached = false): void {
         try {
             $result = Helper::request($url);
             $body = $result->getBody()->__toString();
