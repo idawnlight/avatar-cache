@@ -1,10 +1,10 @@
 <?php
 
-
 namespace Service\Gravatar;
 
+use Core\Contracts\Service\LibInterface;
 
-class Lib
+class Lib implements LibInterface
 {
     public static function parseData(array $data): array {
         $res['identifier'] = $data['identifier'];

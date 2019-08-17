@@ -56,7 +56,7 @@ class Cache
     }
 
     /**
-     * @param \Serializable | string $identifier
+     * @param mixed $identifier
      * @param string $salt
      * @return string
      */

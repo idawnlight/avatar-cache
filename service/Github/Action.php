@@ -7,10 +7,8 @@ use Core\Contracts\Service\ActionAbstract;
 
 class Action extends ActionAbstract
 {
-    private $__type;
-
     public function username() {
-        $this->__type = Lib::TYPE_USERNAME;
+        Lib::$type = Lib::TYPE_USERNAME;
         $this->para = Lib::parseData($this->para);
         $key = Cache::generateKey($this->para, 'github_username');
         $url = Lib::buildUrl($this->para);
@@ -18,10 +16,10 @@ class Action extends ActionAbstract
     }
 
     public function id() {
-        $this->__type = Lib::TYPE_ID;
+        Lib::$type = Lib::TYPE_ID;
         $this->para = Lib::parseData($this->para);
         $key = Cache::generateKey($this->para, 'github_id');
-        $url = Lib::buildUrl($this->para, Lib::TYPE_ID);
+        $url = Lib::buildUrl($this->para);
         $this->handle($key, $url);
     }
 }

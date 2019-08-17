@@ -2,10 +2,13 @@
 
 namespace Service\Github;
 
-class Lib
+use Core\Contracts\Service\LibInterface;
+
+class Lib implements LibInterface
 {
     const TYPE_USERNAME = 0001;
     const TYPE_ID = 0002;
+    public static $type = self::TYPE_USERNAME;
 
     public static function parseData(array $data): array {
         $res['identifier'] = $data['identifier'];
@@ -19,8 +22,8 @@ class Lib
         ]);
     }
 
-    public static function buildUrl(array $data, $type = self::TYPE_USERNAME): string {
-        switch ($type) {
+    public static function buildUrl(array $data): string {
+        switch (self::$type) {
             case self::TYPE_USERNAME:
                 return "https://avatars.githubusercontent.com/{$data['identifier']}?" . self::buildQuery($data);
             case self::TYPE_ID:
