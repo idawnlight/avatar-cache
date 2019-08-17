@@ -10,25 +10,34 @@ use Core\Contracts\HandlerInterface;
 use Core\Items\DataItem;
 use Core\Items\MetaItem;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Request;
 
 abstract class ActionAbstract
 {
     protected $handler;
     protected $para;
     protected $responseId;
+    protected $request;
 
-    public function __construct(HandlerInterface $handler, array $para, $fd = null) {
+    public function __construct(HandlerInterface $handler, array $para, Request $request, $fd = null) {
         $this->handler = $handler;
         $this->para = $para;
+        $this->request = $request;
         $this->responseId = $fd;
     }
 
-    public function handle($key, $url, $last_modified = -1, $etag = '') {
+    public function handle($key, $url) {
+        $user['modified_since'] = strtotime($this->request->getHeaderLine('If-Modified-Since'));
+        $user['etag'] = $this->request->getHeaderLine('If-None-Match');
         if (Cache::isCached($key, Cache::TYPE_META)) {
             $cache = Cache::getCache($key, Cache::TYPE_META);
             $dataKey = $cache->getDataKey();
             $data = Cache::getCache($dataKey, Cache::TYPE_DATA);
-            $this->handler->response(Helper::createResponseFromCache($data), $this->responseId);
+            if ($dataKey === $user['etag'] || $data->last_modify === $user['modified_since']) {
+                $this->handler->response(Helper::createCachedResponse(), $this->responseId);
+            } else {
+                $this->handler->response(Helper::createResponseFromCache($data), $this->responseId);
+            }
             if ($cache->hasExpired()) {
                 $this->refreshCache($key, $url, true);
             }

@@ -19,7 +19,7 @@ class Helper
             return $client->request('GET', $url, [
                 'timeout' => 3,
                 'headers' => [
-                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3872.0 Safari/537.36 avatar-cache/' . VERSION,
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3872.0 Safari/537.36 avatar-cache/' . Config::version(),
                     'Accept' => 'image/*,*/*'
                 ]
             ]);
@@ -39,8 +39,15 @@ class Helper
             'Last-Modified' => gmdate('D, d M Y H:i:s T', $cache->last_modify),
             'Expire' => gmdate('D, d M Y H:i:s T', time() + Config::metaExpire()),
             'Cache-Control' => 'max-age=' . Config::metaExpire(),
+            'ETag' => md5($cache->content),
             'X-Cache-Status' => 'HIT; ' . $cache->expireAt . '; ' . (($cache->hasExpired()) ? 'Expired; Refresh' : 'Live')
         ], $cache->content);
+    }
+
+    public static function createCachedResponse(): ResponseInterface {
+        return new Response(304, [
+            'X-Cache-Status' => 'HIT; Browser Cache'
+        ]);
     }
 
     public static function createRedirectResponse(string $url): ResponseInterface {
