@@ -3,6 +3,7 @@
 namespace Core\HttpHandler;
 
 use Core\Bootstrap;
+use Core\Components\Config;
 use Core\Contracts\HandlerInterface;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
@@ -57,6 +58,9 @@ class Native implements HandlerInterface
                 header("$name: $value", false);
             }
         }
+        header('X-Content-Type-Options: nosniff');
+        header('Server: ' . Config::node());
+        header('X-Powered-By: avatar-cache/' . Config::version());
         $stream = $response->getBody();
         if (strlen($stream) !== 0) {
             if ($stream->isSeekable()) {

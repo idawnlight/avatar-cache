@@ -2,7 +2,9 @@
 
 $config = [
     'core' => [
-        "debug" => false,
+        'debug' => false,
+        'version' => VERSION,
+        'node' => 'NodeName',
         'handler' => [
             'type' => \Core\HttpHandler\Swoole::class,
             'options' => [

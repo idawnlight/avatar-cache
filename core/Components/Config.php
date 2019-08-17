@@ -28,6 +28,14 @@ class Config
         return self::$config['core']['debug'];
     }
 
+    public static function version() {
+        return self::$config['core']['version'] ?? 'unknown';
+    }
+
+    public static function node() {
+        return self::$config['core']['node'] ?? 'node';
+    }
+
     public static function service($service) :array {
         return self::$config['service'][$service] ?? [];
     }
