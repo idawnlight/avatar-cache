@@ -28,7 +28,7 @@ class Helper
         }
     }
 
-    public static function createResponseFromCache(CacheAbstract $cache): ResponseInterface {
+    public static function createResponseFromCache(CacheAbstract $cache, $dataKey): ResponseInterface {
         if (! $cache instanceof DataItem) {
             return new Response(500, [],'internal cache error');
         }
@@ -39,7 +39,7 @@ class Helper
             'Last-Modified' => gmdate('D, d M Y H:i:s T', $cache->last_modify),
             'Expire' => gmdate('D, d M Y H:i:s T', time() + Config::metaExpire()),
             'Cache-Control' => 'max-age=' . Config::metaExpire(),
-            'ETag' => md5($cache->content),
+            'ETag' => $dataKey,
             'X-Cache-Status' => 'HIT; ' . $cache->expireAt . '; ' . (($cache->hasExpired()) ? 'Expired; Refresh' : 'Live')
         ], $cache->content);
     }

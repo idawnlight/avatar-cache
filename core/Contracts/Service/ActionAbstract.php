@@ -36,7 +36,7 @@ abstract class ActionAbstract
             if ($dataKey === $user['etag'] || $data->last_modify === $user['modified_since']) {
                 $this->handler->response(Helper::createCachedResponse(), $this->responseId);
             } else {
-                $this->handler->response(Helper::createResponseFromCache($data), $this->responseId);
+                $this->handler->response(Helper::createResponseFromCache($data, $dataKey), $this->responseId);
             }
             if ($cache->hasExpired()) {
                 $this->refreshCache($key, $url, true);
