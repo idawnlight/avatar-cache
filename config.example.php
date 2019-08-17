@@ -19,6 +19,10 @@ $config = [
             ]
         ],
         'cache' => [
+            'gzip' => [
+                'enabled' => true,
+                'level' => 5
+            ],
             // PSR-6 CacheItemPoolInterface
             'any' => new \Stash\Pool(new \Stash\Driver\FileSystem([
                 'dirSplit' => 2,

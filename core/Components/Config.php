@@ -36,6 +36,14 @@ class Config
         return self::$config['core']['node'] ?? 'node';
     }
 
+    public static function enableGzip() {
+        return self::$config['core']['cache']['gzip']['enabled'] ?? false;
+    }
+
+    public static function gzipLevel() {
+        return self::$config['core']['cache']['gzip']['level'] ?? 1;
+    }
+
     public static function service($service) :array {
         return self::$config['service'][$service] ?? [];
     }

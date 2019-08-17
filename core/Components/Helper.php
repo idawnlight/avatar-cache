@@ -28,11 +28,20 @@ class Helper
         }
     }
 
-    public static function createResponseFromCache(CacheAbstract $cache, $dataKey): ResponseInterface {
+    public static function createResponseFromCache(CacheAbstract $cache, $dataKey, $gzip): ResponseInterface {
         if (! $cache instanceof DataItem) {
             return new Response(500, [],'internal cache error');
         }
-        return new Response(200, [
+
+        if ($gzip) {
+            $content = $cache->content_gz;
+            $header['Content-Encoding'] = 'gzip';
+        } else {
+            $content = $cache->content;
+            $header = [];
+        }
+
+        return new Response(200, array_merge([
             'Content-Type' => $cache->mime,
             'Content-Length' => $cache->size,
             'Date' => gmdate('D, d M Y H:i:s T', time()),
@@ -41,7 +50,7 @@ class Helper
             'Cache-Control' => 'max-age=' . Config::metaExpire(),
             'ETag' => $dataKey,
             'X-Cache-Status' => 'HIT; ' . $cache->expireAt . '; ' . (($cache->hasExpired()) ? 'Expired; Refresh' : 'Live')
-        ], $cache->content);
+        ], $header), $content);
     }
 
     public static function createCachedResponse(): ResponseInterface {
@@ -57,5 +66,13 @@ class Helper
             'Location' => $url,
             'X-Cache-Status: MISS; Redirected'
         ]);
+    }
+
+    public static function gzencode($str) {
+        if (Config::enableGzip() && function_exists("gzencode")) {
+            return gzencode($str, Config::gzipLevel());
+        } else {
+            return $str;
+        }
     }
 }
