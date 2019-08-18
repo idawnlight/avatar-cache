@@ -2,15 +2,11 @@ FROM metowolf/php:7.3.8
 
 LABEL maintainer="idawnlight <idawn@live.com>"
 
-RUN cd /\
-    && wget https://github.com/idawnlight/avatar-cache/archive/master.zip\
-    && unzip master.zip\
-    && rm -f master.zip\
-    && mv avatar-cache-master/ www/\
-    && cd /www\
-    && composer install
+ADD ./ /www
 
 WORKDIR /www
+
+RUN composer install
 
 EXPOSE 9501
 
