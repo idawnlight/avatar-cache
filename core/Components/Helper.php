@@ -48,7 +48,7 @@ class Helper
             'Content-Length' => $cache->size,
             'Date' => gmdate('D, d M Y H:i:s T', time()),
             'Last-Modified' => gmdate('D, d M Y H:i:s T', $cache->last_modify),
-            'Expire' => gmdate('D, d M Y H:i:s T', time() + Config::metaExpire()),
+            'Expires' => gmdate('D, d M Y H:i:s T', time() + Config::metaExpire()),
             'Cache-Control' => 'max-age=' . Config::metaExpire(),
             'ETag' => $dataKey,
             'X-Cache-Status' => 'HIT; ' . $cache->expireAt . '; ' . (($cache->hasExpired()) ? 'Expired; Refresh' : 'Live')
