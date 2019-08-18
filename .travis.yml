@@ -16,11 +16,12 @@ script:
       set -Eeuo pipefail
       set -x
       docker build -t travis .
-      if ("$TRAVIS_TAG" != "")
-      then
+      if [ "$TRAVIS_TAG" != "" ]; then
         image_version=`echo -e "$TRAVIS_TAG\c" | awk -F 'v' '{print $2}'`
-        docker-publish travis idawnlight/avatar-cache:${image_version}
+      else
+        image_version=$(cat index.php | grep 'const VERSION = ' | awk -F "'" '{print $2}')-dev
       fi
+      docker-publish travis idawnlight/avatar-cache:${image_version}
     )
 after_script:
   - docker images
