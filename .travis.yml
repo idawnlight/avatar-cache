@@ -16,8 +16,11 @@ script:
       set -Eeuo pipefail
       set -x
       docker build -t travis .
-      image_version=`echo -e "$TRAVIS_TAG\c" | awk -F 'v' '{print $2}'`
-      docker-publish travis idawnlight/avatar-cache:${image_version}
+      if ("$TRAVIS_TAG" != "")
+      then
+        image_version=`echo -e "$TRAVIS_TAG\c" | awk -F 'v' '{print $2}'`
+        docker-publish travis idawnlight/avatar-cache:${image_version}
+      fi
     )
 after_script:
   - docker images
