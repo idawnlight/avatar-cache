@@ -36,23 +36,14 @@ class Helper
     /**
      * @param CacheAbstract $cache
      * @param string $dataKey
-     * @param bool $gzip
      * @return ResponseInterface
      */
-    public static function createResponseFromCache(CacheAbstract $cache, string $dataKey, bool $gzip = false): ResponseInterface {
+    public static function createResponseFromCache(CacheAbstract $cache, string $dataKey): ResponseInterface {
         if (! $cache instanceof DataItem) {
             return new Response(500, [],'internal cache error');
         }
 
-        if ($gzip) {
-            $content = $cache->content_gz;
-            $header['Content-Encoding'] = 'gzip';
-        } else {
-            $content = $cache->content;
-            $header = [];
-        }
-
-        return new Response(200, array_merge([
+        return new Response(200, [
             'Content-Type' => $cache->mime,
             'Content-Length' => $cache->size,
             'Date' => gmdate('D, d M Y H:i:s T', time()),
@@ -61,7 +52,7 @@ class Helper
             'Cache-Control' => 'max-age=' . Config::metaExpire(),
             'ETag' => $dataKey,
             'X-Cache-Status' => 'HIT; ' . $cache->expireAt . '; ' . (($cache->hasExpired()) ? 'Expired; Refresh' : 'Live')
-        ], $header), $content);
+        ], $cache->content);
     }
 
     /**
@@ -86,17 +77,5 @@ class Helper
             'Location' => $url,
             'X-Cache-Status: MISS; Redirected'
         ]);
-    }
-
-    /**
-     * @param string $str
-     * @return string
-     */
-    public static function gzencode(string $str): string {
-        if (Config::enableGzip() && function_exists("gzencode")) {
-            return gzencode($str, Config::gzipLevel());
-        } else {
-            return $str;
-        }
     }
 }

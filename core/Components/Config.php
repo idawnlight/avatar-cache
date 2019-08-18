@@ -67,20 +67,6 @@ class Config
     }
 
     /**
-     * @return bool
-     */
-    public static function enableGzip(): bool {
-        return self::$config['core']['cache']['gzip']['enabled'] ?? false;
-    }
-
-    /**
-     * @return int
-     */
-    public static function gzipLevel(): int {
-        return self::$config['core']['cache']['gzip']['level'] ?? 1;
-    }
-
-    /**
      * @param string $service
      * @return array
      */

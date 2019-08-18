@@ -34,7 +34,6 @@ abstract class ActionAbstract
     public function handle(string $key, string $url): void {
         $user['modified_since'] = strtotime($this->request->getHeaderLine('If-Modified-Since'));
         $user['etag'] = $this->request->getHeaderLine('If-None-Match');
-        $user['gzip'] = strpos(' ' . $this->request->getHeaderLine('Accept-Encoding'), 'gzip') && Config::enableGzip() && function_exists("gzencode");
         if (Cache::isCached($key, Cache::TYPE_META)) {
             $cache = Cache::getCache($key, Cache::TYPE_META);
             $dataKey = $cache->getDataKey();
@@ -42,7 +41,7 @@ abstract class ActionAbstract
             if ($dataKey === $user['etag'] || $data->last_modify === $user['modified_since']) {
                 $this->handler->response(Helper::createCachedResponse(), $this->responseId);
             } else {
-                $this->handler->response(Helper::createResponseFromCache($data, $dataKey, $user['gzip']), $this->responseId);
+                $this->handler->response(Helper::createResponseFromCache($data, $dataKey), $this->responseId);
             }
             if ($cache->hasExpired()) {
                 $this->refreshCache($key, $url, true);
