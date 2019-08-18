@@ -5,6 +5,7 @@ $config = [
         'debug' => false,
         'version' => VERSION . \Core\Components\Config::currentGitCommit(GIT_DIR),
         'node' => 'NodeName',
+        'domain' => 'http://avatar.test/',
         'handler' => [
             'type' => \Core\HttpHandler\Swoole::class,
             'options' => [

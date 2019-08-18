@@ -62,6 +62,10 @@ class Config
         return self::$config['core']['node'] ?? 'node';
     }
 
+    public static function domain() {
+        return self::$config['core']['domain'] ?? '/';
+    }
+
     /**
      * @return bool
      */
