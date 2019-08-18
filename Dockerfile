@@ -6,7 +6,7 @@ ADD ./ /www
 
 WORKDIR /www
 
-RUN composer install
+RUN composer install --no-dev
 
 EXPOSE 9501
 
