@@ -3,7 +3,7 @@
 $config = [
     'core' => [
         'debug' => false,
-        'version' => VERSION,
+        'version' => VERSION . \Core\Components\Config::currentGitCommit(GIT_DIR),
         'node' => 'NodeName',
         'handler' => [
             'type' => \Core\HttpHandler\Swoole::class,
