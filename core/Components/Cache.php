@@ -73,13 +73,17 @@ class Cache
      * @return PoolInterface
      */
     public static function getPool($type = self::TYPE_ANY): PoolInterface {
+        $pool = Config::cachePool();
         switch ($type) {
             case self::TYPE_META:
-                return Config::metaPool();
+                $pool->setNamespace('meta');
+                break;
             case self::TYPE_DATA:
-                return Config::dataPool();
+                $pool->setNamespace('data');
+                break;
             default:
-                return Config::anyPool();
+                $pool->setNamespace(null);
         }
+        return $pool;
     }
 }

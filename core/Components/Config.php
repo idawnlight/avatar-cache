@@ -120,21 +120,7 @@ class Config
     /**
      * @return PoolInterface
      */
-    public static function anyPool() :PoolInterface {
-        return self::$config['core']['cache']['any'];
-    }
-
-    /**
-     * @return PoolInterface
-     */
-    public static function metaPool() :PoolInterface {
-        return self::$config['core']['cache']['meta'];
-    }
-
-    /**
-     * @return PoolInterface
-     */
-    public static function dataPool() :PoolInterface {
-        return self::$config['core']['cache']['data'];
+    public static function cachePool() :PoolInterface {
+        return self::$config['core']['cache'];
     }
 }
