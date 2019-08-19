@@ -24,7 +24,7 @@ class Config
 
     public static function currentGitCommit(string $git_dir): string {
         if ( is_dir($git_dir) && $hash = file_get_contents($git_dir . 'refs/heads/master') ) {
-            return '-' . substr(trim($hash), 0, 6);
+            return '-' . substr(trim($hash), 0, 7);
         } else {
             return '';
         }
