@@ -120,7 +120,7 @@ class Config
     /**
      * @return PoolInterface
      */
-    public static function cachePool() :PoolInterface {
+    public static function cachePool() {
         return self::$config['core']['cache'];
     }
 }

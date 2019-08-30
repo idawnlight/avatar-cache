@@ -1,9 +1,12 @@
 <?php
 
+use Core\Components\Cache;
+use Core\Components\Config;
+
 $config = [
     'core' => [
         'debug' => false,
-        'version' => VERSION . \Core\Components\Config::currentGitCommit(GIT_DIR),
+        'version' => VERSION . Config::currentGitCommit(GIT_DIR),
         'node' => 'NodeName',
         'domain' => 'http://avatar.test/',
         'handler' => [
@@ -14,23 +17,23 @@ $config = [
                 'port' => 9501,
                 'config' => [ // Refer to https://wiki.swoole.com/wiki/page/274.html
                     "daemonize" => 0,
-                    "worker_num" => \Core\Components\Config::cpuNum() * 4,
+                    "worker_num" => Config::cpuNum() * 4,
                     "max_request" => 128
                 ]
             ]
         ],
         'cache' => [
             // PSR-6 CacheItemPoolInterface
-            'any' => new \Stash\Pool(new \Stash\Driver\FileSystem([
-                'dirSplit' => 2,
+            Cache::POOL_ANY => new \Stash\Pool(new \Stash\Driver\FileSystem([
+                'dirSplit' => 1,
                 'path' => CACHE_DIR
             ])),
-            'meta' => new \Stash\Pool(new \Stash\Driver\FileSystem([
-                'dirSplit' => 2,
+            Cache::POOL_META => new \Stash\Pool(new \Stash\Driver\FileSystem([
+                'dirSplit' => 1,
                 'path' => CACHE_DIR . 'meta/'
             ])),
-            'data' => new \Stash\Pool(new \Stash\Driver\FileSystem([
-                'dirSplit' => 2,
+            Cache::POOL_DATA => new \Stash\Pool(new \Stash\Driver\FileSystem([
+                'dirSplit' => 1,
                 'path' => CACHE_DIR . 'data/'
             ]))
         ],

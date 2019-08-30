@@ -13,6 +13,10 @@ class Cache
     const TYPE_DATA = 0001;
     const TYPE_META = 0002;
 
+    const POOL_ANY = 0020;
+    const POOL_META = 0021;
+    const POOL_DATA = 0022;
+
     /**
      * @param string $identifier
      * @param int $type
@@ -74,16 +78,29 @@ class Cache
      */
     public static function getPool($type = self::TYPE_ANY): PoolInterface {
         $pool = Config::cachePool();
-        switch ($type) {
-            case self::TYPE_META:
-                $pool->setNamespace('meta');
-                break;
-            case self::TYPE_DATA:
-                $pool->setNamespace('data');
-                break;
-            default:
-                $pool->setNamespace(null);
+        if (is_array($pool)) {
+            switch ($type) {
+                case self::TYPE_META:
+                    return $pool[self::POOL_META];
+                    break;
+                case self::TYPE_DATA:
+                    return $pool[self::POOL_DATA];
+                    break;
+                default:
+                    return $pool[self::POOL_ANY];
+            }
+        } else if ($pool instanceof PoolInterface) {
+            switch ($type) {
+                case self::TYPE_META:
+                    $pool->setNamespace('meta');
+                    break;
+                case self::TYPE_DATA:
+                    $pool->setNamespace('data');
+                    break;
+                default:
+                    $pool->setNamespace(null);
+            }
+            return $pool;
         }
-        return $pool;
     }
 }
