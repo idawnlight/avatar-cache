@@ -75,7 +75,7 @@ class Helper
             'Cache-Control' => 'no-cache',
             'Pragma' => 'no-cache',
             'Location' => $url,
-            'X-Cache-Status: MISS; Redirected'
+            'X-Cache-Status' => 'MISS; Redirected'
         ]);
     }
 }
