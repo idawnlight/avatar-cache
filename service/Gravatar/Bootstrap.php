@@ -8,6 +8,6 @@ use Core\Router;
 class Bootstrap implements BootstrapInterface
 {
     public static function route(Router $router) {
-        $router->addRoute('GET', '/gravatar/{identifier:[a-f0-9]{32}}', 'index');
+        $router->addRoute('GET', '/gravatar/{identifier:[a-f0-9]{32}}[/]', 'index');
     }
 }
