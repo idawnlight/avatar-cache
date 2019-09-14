@@ -50,7 +50,7 @@ class Helper
             'Last-Modified' => gmdate('D, d M Y H:i:s T', $cache->last_modify),
             'Expires' => gmdate('D, d M Y H:i:s T', time() + Config::metaExpire()),
             'Cache-Control' => 'max-age=' . Config::metaExpire(),
-            'ETag' => $dataKey,
+            'ETag' => '"' . $dataKey . '"',
             'X-Cache-Status' => 'HIT; ' . $cache->expireAt . '; ' . (($cache->hasExpired()) ? 'Expired; Refresh' : 'Live')
         ], $cache->content);
     }

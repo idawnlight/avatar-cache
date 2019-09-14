@@ -38,7 +38,7 @@ abstract class ActionAbstract
             $cache = Cache::getCache($key, Cache::TYPE_META);
             $dataKey = $cache->getDataKey();
             $data = Cache::getCache($dataKey, Cache::TYPE_DATA);
-            if ($dataKey === $user['etag'] || $data->last_modify === $user['modified_since']) {
+            if ('"' . $dataKey . '"' === $user['etag'] || $data->last_modify === $user['modified_since']) {
                 $this->handler->response(Helper::createCachedResponse(), $this->responseId);
             } else {
                 $this->handler->response(Helper::createResponseFromCache($data, $dataKey), $this->responseId);
