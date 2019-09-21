@@ -57,11 +57,15 @@ class Helper
 
     /**
      * Create a 304 response
+     * @param string $reason
      * @return ResponseInterface
      */
-    public static function createCachedResponse(): ResponseInterface {
+    public static function createCachedResponse(string $reason = ''): ResponseInterface {
+        if ($reason !== '') {
+            $reason = '; ' . $reason;
+        }
         return new Response(304, [
-            'X-Cache-Status' => 'HIT; Browser Cache'
+            'X-Cache-Status' => 'HIT; Browser Cache' . $reason
         ]);
     }
 

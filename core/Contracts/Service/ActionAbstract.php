@@ -38,8 +38,10 @@ abstract class ActionAbstract
             $cache = Cache::getCache($key, Cache::TYPE_META);
             $dataKey = $cache->getDataKey();
             $data = Cache::getCache($dataKey, Cache::TYPE_DATA);
-            if ('"' . $dataKey . '"' === $user['etag'] || $data->last_modify === $user['modified_since']) {
-                $this->handler->response(Helper::createCachedResponse(), $this->responseId);
+            if ('"' . $dataKey . '"' === $user['etag']) {
+                $this->handler->response(Helper::createCachedResponse('ETag matched'), $this->responseId);
+            } else if ($data->last_modify === $user['modified_since']) {
+                $this->handler->response(Helper::createCachedResponse('Date matched'), $this->responseId);
             } else {
                 $this->handler->response(Helper::createResponseFromCache($data, $dataKey), $this->responseId);
             }
