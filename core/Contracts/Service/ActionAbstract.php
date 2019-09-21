@@ -70,7 +70,10 @@ abstract class ActionAbstract
                 Cache::renewExpire($dataKey, Cache::TYPE_DATA);
             }
             $mime = $result->getHeaderLine('Content-Type');
-            $last_modified = $result->getHeaderLine('Last-Modified') ?? gmdate('D, d M Y H:i:s T', time());
+            $last_modified = $result->getHeaderLine('Last-Modified');
+            if ($last_modified === '') {
+                $last_modified = gmdate('D, d M Y H:i:s T', time());
+            }
             Cache::setCache($dataKey, Cache::TYPE_DATA, new DataItem($body, time() + Config::dataExpire(), $mime, strtotime($last_modified)));
             Cache::setCache($key, Cache::TYPE_META, new MetaItem($dataKey, $url, $this->para, time() + Config::metaExpire()));
         } catch (GuzzleException $e) {
