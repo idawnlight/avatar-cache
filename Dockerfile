@@ -1,10 +1,10 @@
-FROM metowolf/php:7.3.9
+FROM metowolf/php:7.3.10
 
 LABEL maintainer="idawnlight <idawn@live.com>"
 
-ADD ./ /www
+ADD ./ /app
 
-WORKDIR /www
+WORKDIR /app
 
 RUN composer install --no-dev
 
