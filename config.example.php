@@ -47,6 +47,9 @@ $config = [
             'expire' => [
                 'meta' => 86400,
                 'data' => 2592000
+            ],
+            'http-request' => [
+                'verify-ssl-certificate': true
             ]
         ],
         'github' => [
