@@ -5,7 +5,6 @@ namespace Core\Components;
 
 use Core\Contracts\CacheAbstract;
 use Core\Contracts\Responsible;
-use Core\Components\Config;
 use Core\Items\DataItem;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -27,8 +26,7 @@ class Helper
                 'headers' => [
                     'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3872.0 Safari/537.36 avatar-cache/' . Config::version(),
                     'Accept' => 'image/*,*/*'
-                ],
-                'verify' => Config::getConfig()['service']['http-request']['verify-ssl-certificate']
+                ]
             ]);
         } catch (GuzzleException $e) {
             throw $e;
