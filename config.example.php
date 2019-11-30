@@ -17,8 +17,9 @@ $config = [
                 'port' => 9501,
                 'config' => [ // Refer to https://wiki.swoole.com/wiki/page/274.html
                     "daemonize" => 0,
+                    'http_compression' => true,
                     "worker_num" => Config::cpuNum() * 4,
-                    "max_request" => 128
+                    "max_request" => 2000
                 ]
             ]
         ],
