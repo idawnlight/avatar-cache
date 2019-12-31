@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Core\Contracts;
 
 use Core\Bootstrap;

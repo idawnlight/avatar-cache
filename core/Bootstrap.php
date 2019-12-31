@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Core;
 
 use Core\Contracts\HandlerInterface;

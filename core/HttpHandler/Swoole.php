@@ -32,7 +32,7 @@ class Swoole implements HandlerInterface
             }
         }
         $resp->header('X-Content-Type-Options', 'nosniff');
-        $resp->header('Server', Config::node());
+        $resp->header('X-Node', Config::node());
         $resp->header('X-Powered-By', 'avatar-cache/' . Config::version());
         $stream = $response->getBody();
         if (strlen($stream) !== 0) {

@@ -59,7 +59,7 @@ class Native implements HandlerInterface
             }
         }
         header('X-Content-Type-Options: nosniff');
-        header('Server: ' . Config::node());
+        header('X-Node: ' . Config::node());
         header('X-Powered-By: avatar-cache/' . Config::version());
         $stream = $response->getBody();
         if (strlen($stream) !== 0) {
