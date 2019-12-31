@@ -56,6 +56,19 @@ class Helper
     }
 
     /**
+     * Create a 200 response from given string
+     * @param string $content
+     * @return ResponseInterface
+     */
+    public static function createResponseFromString(string $content): ResponseInterface {
+        return new Response(200, [
+            'Cache-Control' => 'no-cache',
+            'Pragma' => 'no-cache',
+            'X-Cache-Status' => 'Ignore; String'
+        ], $content);
+    }
+
+    /**
      * Create a 304 response
      * @param string $reason
      * @return ResponseInterface
