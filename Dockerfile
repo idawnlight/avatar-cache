@@ -1,4 +1,4 @@
-FROM metowolf/php:7.3.11
+FROM metowolf/php:7.4.1
 
 LABEL maintainer="idawnlight <idawn@live.com>"
 
