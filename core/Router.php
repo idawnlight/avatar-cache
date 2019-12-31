@@ -18,7 +18,7 @@ class Router
             $this->__routeCollector = $r;
             $this->loadService();
         }, [
-            'cacheFile' => CACHE_DIR . 'route.' . md5(Config::version()) . '.php',
+            'cacheFile' => CACHE_DIR . 'route.' . hash('crc32', (Config::version())) . '.php',
             'cacheDisabled' => Config::debug()
         ]);
     }
