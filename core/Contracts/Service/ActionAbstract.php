@@ -43,7 +43,7 @@ abstract class ActionAbstract
             } else if ($data->last_modify === $user['modified_since']) {
                 $this->handler->response(Helper::createCachedResponse('Date matched'), $this->responseId);
             } else {
-                $this->handler->response(Helper::createResponseFromCache($data, $dataKey), $this->responseId);
+                $this->handler->response(Helper::createResponseFromCache($data, $dataKey, $data->expireAt), $this->responseId);
             }
             if ($cache->hasExpired()) {
                 $this->refreshCache($key, $url, true);
