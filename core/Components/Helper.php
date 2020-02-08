@@ -36,6 +36,7 @@ class Helper
     /**
      * @param CacheAbstract $cache
      * @param string $dataKey
+     * @param int $expireAt
      * @return ResponseInterface
      */
     public static function createResponseFromCache(CacheAbstract $cache, string $dataKey, int $expireAt = -1): ResponseInterface {
@@ -51,7 +52,7 @@ class Helper
             'Expires' => gmdate('D, d M Y H:i:s T', time() + Config::metaExpire()),
             'Cache-Control' => 'max-age=' . Config::metaExpire(),
             'ETag' => '"' . $dataKey . '"',
-            'X-Cache-Status' => 'HIT; ' . $expireAt . '; ' . (($cache->hasExpired()) ? 'Expired; Refresh' : 'Live')
+            'X-Cache-Status' => 'HIT; ' . $expireAt . '; ' . ($expireAt > time() ? 'Expired; Refresh' : 'Live')
         ], $cache->content);
     }
 
