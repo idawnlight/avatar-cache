@@ -52,7 +52,7 @@ class Helper
             'Expires' => gmdate('D, d M Y H:i:s T', time() + Config::metaExpire()),
             'Cache-Control' => 'max-age=' . Config::metaExpire(),
             'ETag' => '"' . $dataKey . '"',
-            'X-Cache-Status' => 'HIT; ' . $expireAt . '; ' . ($expireAt > time() ? 'Expired; Refresh' : 'Live')
+            'X-Cache-Status' => 'HIT; ' . $expireAt . '; ' . (time() > $expireAt ? 'Expired; Refresh' : 'Live')
         ], $cache->content);
     }
 
