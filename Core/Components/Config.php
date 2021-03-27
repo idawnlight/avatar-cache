@@ -11,19 +11,19 @@ class Config
     /**
      * @return array
      */
-    public static function getConfig() :array {
+    public static function getConfig(): array {
         return self::$config;
     }
 
     /**
      * @param $config
      */
-    public static function setConfig($config) :void {
+    public static function setConfig($config): void {
         self::$config = $config;
     }
 
     public static function currentGitCommit(string $git_dir): string {
-        if ( is_dir($git_dir) && $hash = file_get_contents($git_dir . 'refs/heads/master') ) {
+        if (is_dir($git_dir) && $hash = file_get_contents($git_dir . 'refs/heads/master')) {
             return '-' . substr(trim($hash), 0, 7);
         } else {
             return '';
@@ -70,36 +70,22 @@ class Config
      * @param string $service
      * @return array
      */
-    public static function service(string $service) :array {
+    public static function service(string $service): array {
         return self::$config['service'][$service] ?? [];
     }
 
     /**
      * @return string
      */
-    public static function handlerType() :string {
+    public static function handlerType(): string {
         return self::$config['core']['handler']['type'];
     }
 
     /**
      * @return array
      */
-    public static function handlerOptions() :array {
+    public static function handlerOptions(): array {
         return self::$config['core']['handler']['options'] ?? [];
-    }
-
-    /**
-     * @return int
-     */
-    public static function metaExpire(): int {
-        return self::$config['service']['general']['expire']['meta'];
-    }
-
-    /**
-     * @return int
-     */
-    public static function dataExpire(): int {
-        return self::$config['service']['general']['expire']['data'];
     }
 
     /**
@@ -115,6 +101,20 @@ class Config
             default:
                 return Config::metaExpire();
         }
+    }
+
+    /**
+     * @return int
+     */
+    public static function metaExpire(): int {
+        return self::$config['service']['general']['expire']['meta'];
+    }
+
+    /**
+     * @return int
+     */
+    public static function dataExpire(): int {
+        return self::$config['service']['general']['expire']['data'];
     }
 
     /**

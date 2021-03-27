@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Core\Contracts\Service;
-
 
 interface LibInterface
 {

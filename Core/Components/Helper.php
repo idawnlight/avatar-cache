@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Core\Components;
 
 use Core\Contracts\CacheAbstract;
-use Core\Contracts\Responsible;
 use Core\Items\DataItem;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -40,8 +38,8 @@ class Helper
      * @return ResponseInterface
      */
     public static function createResponseFromCache(CacheAbstract $cache, string $dataKey, int $expireAt = -1): ResponseInterface {
-        if (! $cache instanceof DataItem) {
-            return new Response(500, [],'internal cache error');
+        if (!$cache instanceof DataItem) {
+            return new Response(500, [], 'internal cache error');
         }
 
         return new Response(200, [

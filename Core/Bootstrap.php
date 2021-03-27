@@ -2,12 +2,12 @@
 
 namespace Core;
 
-use Core\Contracts\HandlerInterface;
-use FastRoute\Dispatcher;
 use Core\Components\Config;
+use Core\Contracts\HandlerInterface;
+use Core\Exceptions\HttpHandlerException;
+use FastRoute\Dispatcher;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
-use Core\Exceptions\HttpHandlerException;
 
 class Bootstrap
 {
@@ -28,9 +28,9 @@ class Bootstrap
         } else {
             $handler = Config::handlerType();
         }
-        if (! class_exists($handler)) throw new HttpHandlerException('Target HttpHandler ' . $handler . ' not found');
+        if (!class_exists($handler)) throw new HttpHandlerException('Target HttpHandler ' . $handler . ' not found');
         $this->handler = new $handler($this);
-        if (! $this->handler instanceof HandlerInterface) throw new HttpHandlerException('Target HttpHandler ' . $handler . ' invalid');
+        if (!$this->handler instanceof HandlerInterface) throw new HttpHandlerException('Target HttpHandler ' . $handler . ' invalid');
         $this->handler->run();
     }
 
@@ -52,10 +52,16 @@ class Bootstrap
             case Dispatcher::FOUND:
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
-                [$name, $action] = explode('.', $handler);
+                [
+                    $name,
+                    $action
+                ] = explode('.', $handler);
                 $class = 'Service\\' . $name . '\Action';
                 $service = new $class($this->handler, array_merge($vars, $parameter), $request, $fd);
-                call_user_func([$service, $action]);
+                call_user_func([
+                    $service,
+                    $action
+                ]);
                 // ... call $handler with $vars
                 break;
         }

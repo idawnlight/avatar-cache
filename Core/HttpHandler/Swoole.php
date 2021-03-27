@@ -1,16 +1,15 @@
 <?php
 
-
 namespace Core\HttpHandler;
 
 use Core\Bootstrap;
 use Core\Components\Config;
-use GuzzleHttp\Psr7\Request;
 use Core\Contracts\HandlerInterface;
+use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
-use Swoole\Http\Server as swooleServer;
 use Swoole\Http\Request as swooleRequest;
 use Swoole\Http\Response as swooleResponse;
+use Swoole\Http\Server as swooleServer;
 
 class Swoole implements HandlerInterface
 {

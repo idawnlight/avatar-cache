@@ -28,30 +28,14 @@ class Native implements HandlerInterface
         }
     }
 
-    public function run(): void {
-        ob_start();
-        $method = $_SERVER['REQUEST_METHOD'] ?? '';
-        $uri = $_SERVER['REQUEST_URI'] ?? $_SERVER['PATH_INFO'] ?? '/';
-        $headers = getallheaders() ?? [];
-        $protocol = explode('HTTP/', $_SERVER['SERVER_PROTOCOL'])[1] ?? '';
-        $request = new Request($method, $uri, $headers, file_get_contents('php://input'), $protocol);
-        //var_dump($_SERVER);
-        $this->bootstrap->handle($request);
-    }
-
     /**
      * Send an HTTP response
      * http-interop/response-sender
      * @param ResponseInterface $response
      * @return void
      */
-    function send(ResponseInterface $response)
-    {
-        $http_line = sprintf('HTTP/%s %s %s',
-            $response->getProtocolVersion(),
-            $response->getStatusCode(),
-            $response->getReasonPhrase()
-        );
+    function send(ResponseInterface $response) {
+        $http_line = sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase());
         header($http_line, true, $response->getStatusCode());
         foreach ($response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
@@ -70,5 +54,16 @@ class Native implements HandlerInterface
                 echo $stream->read(1024 * 8);
             }
         }
+    }
+
+    public function run(): void {
+        ob_start();
+        $method = $_SERVER['REQUEST_METHOD'] ?? '';
+        $uri = $_SERVER['REQUEST_URI'] ?? $_SERVER['PATH_INFO'] ?? '/';
+        $headers = getallheaders() ?? [];
+        $protocol = explode('HTTP/', $_SERVER['SERVER_PROTOCOL'])[1] ?? '';
+        $request = new Request($method, $uri, $headers, file_get_contents('php://input'), $protocol);
+        //var_dump($_SERVER);
+        $this->bootstrap->handle($request);
     }
 }

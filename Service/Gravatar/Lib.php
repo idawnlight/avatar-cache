@@ -16,6 +16,10 @@ class Lib implements LibInterface
         return $res;
     }
 
+    public static function buildUrl(array $data): string {
+        return "https://www.gravatar.com/avatar/{$data['identifier']}?" . self::buildQuery($data);
+    }
+
     public static function buildQuery(array $data): string {
         $para = [
             's' => $data['size'],
@@ -26,9 +30,5 @@ class Lib implements LibInterface
         ($data['force_default'] !== null) ? $para['f'] = $data['force_default'] : null;
 
         return http_build_query($para);
-    }
-
-    public static function buildUrl(array $data): string {
-        return "https://www.gravatar.com/avatar/{$data['identifier']}?" . self::buildQuery($data);
     }
 }

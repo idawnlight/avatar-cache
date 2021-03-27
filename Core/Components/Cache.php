@@ -28,6 +28,38 @@ class Cache
     }
 
     /**
+     * @param int $type
+     * @return PoolInterface
+     */
+    public static function getPool($type = self::TYPE_ANY): PoolInterface {
+        $pool = Config::cachePool();
+        if (is_array($pool)) {
+            switch ($type) {
+                case self::TYPE_META:
+                    return $pool[self::POOL_META];
+                    break;
+                case self::TYPE_DATA:
+                    return $pool[self::POOL_DATA];
+                    break;
+                default:
+                    return $pool[self::POOL_ANY];
+            }
+        } else if ($pool instanceof PoolInterface) {
+            switch ($type) {
+                case self::TYPE_META:
+                    $pool->setNamespace('meta');
+                    break;
+                case self::TYPE_DATA:
+                    $pool->setNamespace('data');
+                    break;
+                default:
+                    $pool->setNamespace(null);
+            }
+            return $pool;
+        }
+    }
+
+    /**
      * @param string $identifier
      * @param int $type
      * @return CacheAbstract | MetaItem | DataItem
@@ -69,38 +101,6 @@ class Cache
             return md5(trim($identifier) . $salt);
         } else {
             return md5(serialize($identifier) . $salt);
-        }
-    }
-
-    /**
-     * @param int $type
-     * @return PoolInterface
-     */
-    public static function getPool($type = self::TYPE_ANY): PoolInterface {
-        $pool = Config::cachePool();
-        if (is_array($pool)) {
-            switch ($type) {
-                case self::TYPE_META:
-                    return $pool[self::POOL_META];
-                    break;
-                case self::TYPE_DATA:
-                    return $pool[self::POOL_DATA];
-                    break;
-                default:
-                    return $pool[self::POOL_ANY];
-            }
-        } else if ($pool instanceof PoolInterface) {
-            switch ($type) {
-                case self::TYPE_META:
-                    $pool->setNamespace('meta');
-                    break;
-                case self::TYPE_DATA:
-                    $pool->setNamespace('data');
-                    break;
-                default:
-                    $pool->setNamespace(null);
-            }
-            return $pool;
         }
     }
 }

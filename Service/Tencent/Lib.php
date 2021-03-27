@@ -12,6 +12,10 @@ class Lib implements LibInterface
         return $res;
     }
 
+    public static function buildUrl(array $data): string {
+        return "https://q1.qlogo.cn/g?" . self::buildQuery($data);
+    }
+
     public static function buildQuery(array $data): string {
         $para = [
             'b' => 'qq',
@@ -20,9 +24,5 @@ class Lib implements LibInterface
         ];
 
         return http_build_query($para);
-    }
-
-    public static function buildUrl(array $data): string {
-        return "https://q1.qlogo.cn/g?" . self::buildQuery($data);
     }
 }

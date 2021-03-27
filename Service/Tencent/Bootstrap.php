@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Service\Tencent;
 
 use Core\Contracts\Service\BootstrapInterface;

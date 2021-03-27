@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Core\Contracts\Service;
 
 use Core\Components\Cache;

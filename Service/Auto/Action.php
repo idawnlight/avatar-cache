@@ -21,7 +21,7 @@ class Action extends ActionAbstract
                 throw new Exception();
             }
         } catch (Exception $e) {
-            $url = Config::domain() . 'gravatar/'. md5($this->para['identifier']) . "?s=" . $this->para['size'];
+            $url = Config::domain() . 'gravatar/' . md5($this->para['identifier']) . "?s=" . $this->para['size'];
         }
         $this->handler->response(Helper::createRedirectResponse($url), $this->responseId);
     }

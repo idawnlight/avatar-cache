@@ -16,12 +16,6 @@ class Lib implements LibInterface
         return $res;
     }
 
-    public static function buildQuery(array $data): string {
-        return http_build_query([
-            's' => $data['size']
-        ]);
-    }
-
     public static function buildUrl(array $data): string {
         switch (self::$type) {
             case self::TYPE_USERNAME:
@@ -29,5 +23,11 @@ class Lib implements LibInterface
             case self::TYPE_ID:
                 return "https://avatars.githubusercontent.com/u/{$data['identifier']}?" . self::buildQuery($data);
         }
+    }
+
+    public static function buildQuery(array $data): string {
+        return http_build_query([
+            's' => $data['size']
+        ]);
     }
 }

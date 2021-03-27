@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Service\Github;
 
 use Core\Contracts\Service\BootstrapInterface;
