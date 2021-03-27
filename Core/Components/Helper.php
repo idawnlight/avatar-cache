@@ -63,7 +63,8 @@ class Helper
         return new Response(200, [
             'Cache-Control' => 'no-cache',
             'Pragma' => 'no-cache',
-            'X-Cache-Status' => 'Ignore; String'
+            'X-Cache-Status' => 'Ignore; String',
+            'Content-Type' => 'text/plain'
         ], $content);
     }
 
