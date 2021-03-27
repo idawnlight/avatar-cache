@@ -1,6 +1,7 @@
 {
     "name": "idawnlgiht/avatar-cache",
     "type": "project",
+    "description": "simple & fast cache for small objects",
     "license": "MIT",
     "authors": [
         {
@@ -10,12 +11,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Core\\": "core/",
-            "Service\\": "service/"
+            "Core\\": "Core/",
+            "Service\\": "Service/"
         }
     },
     "require": {
-        "php": "^7.3",
+        "php": "^7.3|^8.0",
         "nikic/fast-route": "^1.3",
         "guzzlehttp/guzzle": "^6.3",
         "psr/log": "^1.1",
