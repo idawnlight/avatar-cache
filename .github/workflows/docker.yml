@@ -8,6 +8,8 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
       - uses: actions/checkout@v1
+      - name: Write Commit Hash
+        run: echo ${{ github.sha }} >> commit_hash
       - uses: jerray/publish-docker-action@master
         with:
           username: idawnlight

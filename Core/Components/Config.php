@@ -23,6 +23,9 @@ class Config
     }
 
     public static function currentGitCommit(string $git_dir): string {
+        if (file_exists(ROOT_DIR . 'commit_hash') && $hash = file_get_contents(ROOT_DIR . 'commit_hash')) {
+            return '-' . substr(trim($hash), 0, 7);
+        }
         if (is_dir($git_dir) && $hash = file_get_contents($git_dir . 'refs/heads/master')) {
             return '-' . substr(trim($hash), 0, 7);
         } else {
