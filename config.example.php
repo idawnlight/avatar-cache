@@ -16,7 +16,7 @@ $config = [
             'options' => [
                 // work for swoole or anything like it
                 'listen' => Config::getEnv('AVATAR_CONFIG_HANDLER_LISTEN', '0.0.0.0'),
-                'port' => Config::getEnv('AVATAR_CONFIG_HANDLER_PORT', 9501),
+                'port' => Config::getEnv('AVATAR_CONFIG_HANDLER_PORT', 9000),
                 'config' => [ // Refer to https://wiki.swoole.com/wiki/page/274.html
                     "daemonize" => 0,
                     'http_compression' => true,
