@@ -1,4 +1,4 @@
-FROM idawnlight/php:7.4.13
+FROM idawnlight/php:8.0.3
 
 LABEL maintainer="idawnlight <idawn@live.com>"
 
@@ -6,7 +6,8 @@ ADD ./ /app
 
 WORKDIR /app
 
-RUN composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
+RUN cp config.example.php config.php \
+  && composer install --prefer-dist --no-progress --optimize-autoloader
 
 EXPOSE 9501
 

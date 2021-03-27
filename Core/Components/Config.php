@@ -30,6 +30,10 @@ class Config
         }
     }
 
+    public static function getEnv(string $env, $default = null) {
+        return (getenv($env) !== false) ? getenv($env) : $default;
+    }
+
     /**
      * @return int
      */

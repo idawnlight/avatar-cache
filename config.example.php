@@ -3,18 +3,20 @@
 use Core\Components\Cache;
 use Core\Components\Config;
 
+$cacheDir = Config::getEnv('AVATAR_CONFIG_CACHE_DIR', CACHE_DIR);
+
 $config = [
     'core' => [
         'debug' => false,
         'version' => VERSION . Config::currentGitCommit(GIT_DIR),
-        'node' => 'NodeName',
-        'domain' => 'http://avatar.test/',
+        'node' => Config::getEnv('AVATAR_CONFIG_NODE', 'NodeName'),
+        'domain' => Config::getEnv('AVATAR_CONFIG_DOMAIN', 'http://avatar.test/'),
         'handler' => [
             'type' => \Core\HttpHandler\Swoole::class,
             'options' => [
                 // work for swoole or anything like it
-                'listen' => '0.0.0.0',
-                'port' => 9501,
+                'listen' => Config::getEnv('AVATAR_CONFIG_HANDLER_LISTEN', '0.0.0.0'),
+                'port' => Config::getEnv('AVATAR_CONFIG_HANDLER_PORT', 9501),
                 'config' => [ // Refer to https://wiki.swoole.com/wiki/page/274.html
                     "daemonize" => 0,
                     'http_compression' => true,
@@ -27,15 +29,15 @@ $config = [
             // PSR-6 CacheItemPoolInterface
             Cache::POOL_ANY => new \Stash\Pool(new \Stash\Driver\FileSystem([
                 'dirSplit' => 1,
-                'path' => CACHE_DIR
+                'path' => $cacheDir
             ])),
             Cache::POOL_META => new \Stash\Pool(new \Stash\Driver\FileSystem([
                 'dirSplit' => 1,
-                'path' => CACHE_DIR . 'meta/'
+                'path' => $cacheDir . 'meta/'
             ])),
             Cache::POOL_DATA => new \Stash\Pool(new \Stash\Driver\FileSystem([
                 'dirSplit' => 1,
-                'path' => CACHE_DIR . 'data/'
+                'path' => $cacheDir . 'data/'
             ]))
         ],
         'rate-limit' => [
@@ -52,7 +54,7 @@ $config = [
         ],
         'github' => [
             // Custom config for every single service
-            // In fact we don't need it
+            // Example: (actually we don't need it, leave it blank)
             'access_token' => ''
         ]
     ]
