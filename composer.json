@@ -21,7 +21,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "psr/log": "^1.1",
         "filp/whoops": "^2.4",
-        "tedivm/stash": "^0.15.2"
+        "tedivm/stash": "^0.16.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
