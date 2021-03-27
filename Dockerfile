@@ -6,7 +6,7 @@ ADD ./ /app
 
 WORKDIR /app
 
-RUN composer install --no-dev
+RUN composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
 
 EXPOSE 9501
 
