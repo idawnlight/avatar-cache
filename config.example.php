@@ -18,10 +18,14 @@ $config = [
                 'listen' => Config::getEnv('AVATAR_CONFIG_HANDLER_LISTEN', '0.0.0.0'),
                 'port' => (int) Config::getEnv('AVATAR_CONFIG_HANDLER_PORT', 9000),
                 'config' => [ // Refer to https://wiki.swoole.com/wiki/page/274.html
-                    "daemonize" => 0,
-                    'http_compression' => true,
-                    "worker_num" => Config::cpuNum() * 4,
-                    "max_request" => 2000
+                    'daemonize' => 0,
+                    'task_worker_num' => Config::cpuNum() * 4,
+                    'task_enable_coroutine' => true,
+                    'worker_num' => Config::cpuNum() * 4,
+                    'dispatch_mode' => 3,
+                    'http_parse_post' => false,
+                    'http_parse_cookie' => false,
+                    'http_parse_files' => false
                 ]
             ]
         ],
