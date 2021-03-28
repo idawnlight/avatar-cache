@@ -10,12 +10,13 @@ use Psr\Http\Message\ResponseInterface;
 use Swoole\Http\Request as swooleRequest;
 use Swoole\Http\Response as swooleResponse;
 use Swoole\Http\Server as swooleServer;
+use Swoole\Server\Task as swooleTask;
 
 class Swoole implements HandlerInterface
 {
-    protected $bootstrap;
-    protected $config;
-    protected $server;
+    protected Bootstrap $bootstrap;
+    protected array $config;
+    protected swooleServer $server;
 
     public function __construct(Bootstrap $bootstrap) {
         $this->bootstrap = $bootstrap;
@@ -38,14 +39,14 @@ class Swoole implements HandlerInterface
             if ($stream->isSeekable()) {
                 $stream->rewind();
             }
-            while (!$stream->eof()) {
-                $resp->write($stream->read(1024 * 8));
-            }
         }
-        $resp->end();
+        $resp->end($stream->getContents());
     }
 
     public function run() {
+        \Swoole\Runtime::enableCoroutine(SWOOLE_HOOK_ALL);
+        \GuzzleHttp\DefaultHandler::setDefaultHandler(\Yurun\Util\Swoole\Guzzle\SwooleHandler::class);
+
         $this->server = new swooleServer($this->config['listen'], $this->config['port'], SWOOLE_BASE);
         $this->server->set($this->config['config']);
 
@@ -56,8 +57,15 @@ class Swoole implements HandlerInterface
             $headers = $request->header ?? [];
             $protocol = explode('HTTP/', $request->server['server_protocol'])[1] ?? '';
             $request = new Request($method, $uri, $headers, $request->rawContent(), $protocol);
+            $this->server->task('test ' . $response->fd);
             $this->bootstrap->handle($request, $response->fd);
         });
+
+        $this->server->on('task', function (swooleServer $server, swooleTask $task) {
+//            var_dump($task);
+        });
+
+        $this->server->on('finish', function (swooleServer $server, int $task_id, $data) {});
 
         $this->server->start();
     }

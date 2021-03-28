@@ -19,7 +19,7 @@ class Bootstrap
     /**
      * @var Router
      */
-    protected $router;
+    protected Router $router;
 
     public function __construct() {
         $this->router = new Router();
@@ -39,7 +39,6 @@ class Bootstrap
         $routeInfo = $this->router->dispatch($request->getMethod(), $request->getUri()->getPath());
         switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
-                // ... 404 Not Found
                 $response = new Response(404, [], '404 Not Found');
                 $this->handler->response($response, $fd);
                 break;
@@ -47,7 +46,6 @@ class Bootstrap
                 $allowedMethods = $routeInfo[1];
                 $response = new Response(405, [], '405 Method Not Allowed');
                 $this->handler->response($response, $fd);
-                // ... 405 Method Not Allowed
                 break;
             case Dispatcher::FOUND:
                 $handler = $routeInfo[1];
@@ -62,7 +60,6 @@ class Bootstrap
                     $service,
                     $action
                 ]);
-                // ... call $handler with $vars
                 break;
         }
     }
