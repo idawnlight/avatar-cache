@@ -3,6 +3,7 @@
 namespace Core;
 
 use Core\Components\Config;
+use Core\Components\Logging;
 use Core\Contracts\HandlerInterface;
 use Core\Exceptions\HttpHandlerException;
 use FastRoute\Dispatcher;
@@ -22,12 +23,15 @@ class Bootstrap
     protected Router $router;
 
     public function __construct() {
+        Logging::info('main', 'Loading Router');
         $this->router = new Router();
+
         if (PHP_SAPI != 'cli') {
             $handler = \Core\HttpHandler\Native::class;
         } else {
             $handler = Config::handlerType();
         }
+        Logging::info('main', 'Loading HttpHandler: ' . $handler);
         if (!class_exists($handler)) throw new HttpHandlerException('Target HttpHandler ' . $handler . ' not found');
         $this->handler = new $handler($this);
         if (!$this->handler instanceof HandlerInterface) throw new HttpHandlerException('Target HttpHandler ' . $handler . ' invalid');
@@ -50,10 +54,7 @@ class Bootstrap
             case Dispatcher::FOUND:
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
-                [
-                    $name,
-                    $action
-                ] = explode('.', $handler);
+                [$name, $action] = explode('.', $handler);
                 $class = 'Service\\' . $name . '\Action';
                 $service = new $class($this->handler, array_merge($vars, $parameter), $request, $fd);
                 call_user_func([
@@ -61,6 +62,9 @@ class Bootstrap
                     $action
                 ]);
                 break;
+            default:
+                $response = new Response(400, [], '400 Bad Request');
+                $this->handler->response($response, $fd);
         }
     }
 }

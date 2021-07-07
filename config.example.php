@@ -14,7 +14,7 @@ $config = [
         'handler' => [
             'type' => \Core\HttpHandler\Swoole::class,
             'options' => [
-                // work for swoole or anything like it
+                // work for swoole or anything similar
                 'listen' => Config::getEnv('AVATAR_CONFIG_HANDLER_LISTEN', '0.0.0.0'),
                 'port' => (int) Config::getEnv('AVATAR_CONFIG_HANDLER_PORT', 9000),
                 'config' => [ // Refer to https://wiki.swoole.com/wiki/page/274.html
@@ -28,6 +28,11 @@ $config = [
                     'http_parse_files' => false
                 ]
             ]
+        ],
+        'logging' => [
+            'streams' => (PHP_SAPI === 'cli') ? [
+                fopen('php://stdout', 'w')
+            ] : []
         ],
         'cache' => [
             // PSR-6 CacheItemPoolInterface

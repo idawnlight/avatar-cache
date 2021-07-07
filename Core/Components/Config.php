@@ -6,7 +6,7 @@ use Stash\Interfaces\PoolInterface;
 
 class Config
 {
-    protected static $config = [];
+    protected static array $config = [];
 
     /**
      * @return array
@@ -93,6 +93,10 @@ class Config
      */
     public static function handlerOptions(): array {
         return self::$config['core']['handler']['options'] ?? [];
+    }
+
+    public static function getLoggerStreams(): array {
+        return self::$config['core']['logging']['streams'] ?? [];
     }
 
     /**

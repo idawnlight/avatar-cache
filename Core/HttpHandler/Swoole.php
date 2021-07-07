@@ -4,6 +4,7 @@ namespace Core\HttpHandler;
 
 use Core\Bootstrap;
 use Core\Components\Config;
+use Core\Components\Logging;
 use Core\Contracts\HandlerInterface;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
@@ -44,25 +45,35 @@ class Swoole implements HandlerInterface
     }
 
     public function run() {
+        Logging::info('handler', 'Initializing');
+
         \Swoole\Runtime::enableCoroutine(SWOOLE_HOOK_ALL);
         \GuzzleHttp\DefaultHandler::setDefaultHandler(\Yurun\Util\Swoole\Guzzle\SwooleHandler::class);
 
-        $this->server = new swooleServer($this->config['listen'], $this->config['port'], SWOOLE_BASE);
+        $this->server = new swooleServer($this->config['listen'], $this->config['port']);
         $this->server->set($this->config['config']);
 
         $this->server->on('request', function (swooleRequest $request, swooleResponse $response) {
             $response->detach();
             $method = $request->server['request_method'] ?? '';
             $uri = $request->server['request_uri'] ?? $request->server['path_info'] ?? '/';
+            if (isset($request->server['query_string']) && $request->server['query_string'] !== "") {
+                $uri .= '?' . $request->server['query_string'];
+            }
             $headers = $request->header ?? [];
             $protocol = explode('HTTP/', $request->server['server_protocol'])[1] ?? '';
             $request = new Request($method, $uri, $headers, $request->rawContent(), $protocol);
+            Logging::debug('handler', $request->getMethod(), [$request->getUri()->getPath(), $request->getUri()->getQuery()]);
             $this->server->task('test ' . $response->fd);
             $this->bootstrap->handle($request, $response->fd);
         });
 
         $this->server->on('task', function (swooleServer $server, swooleTask $task) {
 //            var_dump($task);
+        });
+
+        $this->server->on('start', function (swooleServer $server) {
+            Logging::info('handler', 'Listening on ' . $server->host . ':' . $server->port);
         });
 
         $this->server->on('finish', function (swooleServer $server, int $task_id, $data) {});
